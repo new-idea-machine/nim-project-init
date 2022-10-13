@@ -1,5 +1,7 @@
 #! /etc/bin/env node
 const { execSync } = require("child_process");
+console.log("installing dependencies");
+
 execSync(
   `npm install --save-dev eslint \
 eslint-config-airbnb eslint-config-prettier \
