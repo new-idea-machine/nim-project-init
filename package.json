@@ -1,0 +1,14 @@
+{
+  "name": "nim-project-init",
+  "version": "1.0.0",
+  "description": "A package to initialize a NIM project",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bin": {
+    "nim-project-init": "./bin/index.js"
+  }
+}
