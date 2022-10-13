@@ -10,5 +10,9 @@
   "license": "ISC",
   "bin": {
     "nim-project-init": "./bin/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/new-idea-machine/nim-project-init.git"
   }
 }
