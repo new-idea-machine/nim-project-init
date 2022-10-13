@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "bin": {
-    "nim-project-init": "./bin/index.js"
+    "nim-project-init": "bin/index.js"
   },
   "repository": {
     "type": "git",
