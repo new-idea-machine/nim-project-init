@@ -10,7 +10,7 @@ eslint-plugin-react eslint-plugin-react-hooks`,
 // copy .eslintrc.js and prettier to project root
 const fs = require("fs");
 const path = require("path");
-
+console.log("copying .eslintrc.js and prettier to project root");
 copyFile(
   path.join(__dirname, "./.eslintrc.json"),
   path.join(process.cwd(), ".eslintrc.json")
