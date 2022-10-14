@@ -3,6 +3,7 @@
     "browser": true,
     "es2021": true
   },
+  "ignorePatterns": ["**/node_modules/", "**/dist/", "**/build/", "*.test.js"],
   "extends": ["plugin:react/recommended", "airbnb", "prettier"],
   "overrides": [],
   "parserOptions": {

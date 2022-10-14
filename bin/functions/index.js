@@ -14,13 +14,13 @@ function copyFile(source, target) {
   fs.writeFileSync(targetFile, fs.readFileSync(source));
 }
 
-generateReadMe = (projectName) => {
+const generateReadMe = (projectName) => {
   const contents = fs.readFileSync(
     path.join(__dirname, "../README_TEMPLATE.md")
   );
   const newContents = contents
     .toString()
-    .replace(/{{projectName}}/g, projectName);
+    .replace(/{projectName}/g, projectName);
   fs.writeFileSync(
     path.join(process.cwd(), projectName, "README.md"),
     newContents
@@ -28,5 +28,6 @@ generateReadMe = (projectName) => {
 };
 
 module.exports = {
+  generateReadMe,
   copyFile
 };

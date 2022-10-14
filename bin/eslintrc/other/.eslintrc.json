@@ -1,0 +1,19 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+  "ignorePatterns": ["**/node_modules/", "**/dist/", "**/build/", "*.test.js"],
+  "extends": ["airbnb", "prettier"],
+  "overrides": [],
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "rules": {
+    "quotes": ["error", "double"],
+    "max-len": ["warn", { "code": 100, "ignoreComments": true }],
+    "comma-dangle": ["error", "never"]
+  }
+}
