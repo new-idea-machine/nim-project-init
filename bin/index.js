@@ -1,21 +1,27 @@
 #! /usr/bin/env node
-const fs = require("fs");
-const path = require("path");
 const { execSync } = require("child_process");
 const readline = require("readline");
-const { copyFile, generateReadMe } = require("./functions");
+const {
+  generateReadMe,
+  setTypeModule,
+  addLintScript,
+  addPrettierScript,
+  copyCss
+} = require("./functions");
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 });
 const mainPackages = [
   "eslint",
-  "eslint-config-airbnb",
   "eslint-config-prettier",
   "eslint-plugin-import"
 ];
 
+const nonReactNpmPackages = ["eslint-config-airbnb-base"];
+
 const reactNpmPackages = [
+  "eslint-config-airbnb",
   "eslint-plugin-react",
   "eslint-plugin-jsx-a11y",
   "eslint-plugin-react-hooks"
@@ -35,8 +41,10 @@ const createProject = async (isReact) => {
     execSync(`cd ${projectName} && npm init -y`);
     execSync(`cd ${projectName} && git init`);
     execSync(`cd ${projectName} && touch index.js`);
+    setTypeModule(projectName);
   }
   addLintScript(projectName);
+  addPrettierScript(projectName);
 
   return projectName;
 };
@@ -48,13 +56,13 @@ const runInit = async () => {
 this tool will create the project folder for you. 
 You do not need to create the folder yourself.
 If you are just adding prettier and linting to an existing project,
-you can just run this tool in the project folder.`
+you can just run this tool inside the project folder.`
   );
 
   const installPackages = [...mainPackages];
   let projectName;
   const isExistingProject = await new Promise((resolve, reject) => {
-    rl.question("Is this an existing project? (y/n) ", (answer) => {
+    rl.question("Is this an existing project? (y/N) ", (answer) => {
       if (answer === "y") {
         resolve(true);
       } else {
@@ -63,22 +71,18 @@ you can just run this tool in the project folder.`
     });
   });
   const isReact = await new Promise((resolve, reject) => {
-    rl.question("Is React? (Y/n): ", (answer) => {
+    rl.question("Is React? (y/N): ", (answer) => {
       if (answer === "y" || answer === "Y") {
         installPackages.push(...reactNpmPackages);
         resolve(true);
       } else {
+        installPackages.push(...nonReactNpmPackages);
         resolve(false);
       }
     });
   });
 
-  const baseCss = await new Promise((resolve, reject) => {
-    rl.question("Base CSS? (y/N): ", (answer) => {
-      resolve(answer);
-    });
-  });
-  console.log("installing dependencies");
+  console.log("installing dev dependencies");
   // copy .eslintrc.js and prettier to project root
   if (!isExistingProject) {
     projectName = await createProject(isReact);
@@ -97,62 +101,21 @@ you can just run this tool in the project folder.`
     addLintScript();
   }
 
+  const baseCss = await new Promise((resolve, reject) => {
+    rl.question("Base CSS? (y/N): ", (answer) => {
+      resolve(answer);
+    });
+  });
   if (baseCss === "y") {
-    await copyCss(projectName);
+    let cssPath = await new Promise((resolve) => {
+      rl.question("CSS path: (default src/)", (answer) => {
+        resolve(answer);
+      });
+    });
+    await copyCss(projectName, cssPath);
   }
   console.log("Done!");
   process.exit(0);
 };
 
-const copyGitIgnore = (projectName) => {
-  const gitIgnorePath = path.join(__dirname, "/.gitignore");
-  const targetPath = path.join(process.cwd(), projectName, ".gitignore");
-  copyFile(gitIgnorePath, targetPath);
-};
-const copyConfigFiles = async (projectName, isReact) => {
-  console.log("Copying .eslintrc.js and prettier to project root");
-  let destinationPath = projectName
-    ? path.join(process.cwd(), projectName)
-    : process.cwd();
-  let sourcePath = isReact
-    ? path.join(__dirname, "eslintrc", "react")
-    : path.join(__dirname, "eslintrc", "other");
-  console.log("source path", sourcePath);
-  console.log("destination path", destinationPath);
-  copyFile(
-    path.join(sourcePath, "./.eslintrc.json"),
-    path.join(destinationPath, ".eslintrc.json")
-  );
-  copyFile(
-    path.join(__dirname, ".prettierrc"),
-    path.join(destinationPath, ".prettierrc")
-  );
-};
-const copyCss = async (projectName) => {
-  console.log("Copying base css");
-  let cssPath = await new Promise((resolve) => {
-    rl.question("CSS path: (default src/)", (answer) => {
-      resolve(answer);
-    });
-  });
-
-  cssPath = cssPath === "" ? "src/" : cssPath;
-  let filePath = projectName
-    ? path.join(process.cwd(), projectName, cssPath)
-    : path.join(process.cwd(), cssPath);
-  console.log("Installing base css...");
-  // check if cssPath exists
-  if (!fs.existsSync(filePath)) {
-    fs.mkdirSync(filePath);
-  }
-  copyFile(path.join(__dirname, "./base.css"), filePath);
-};
-const addLintScript = (projectName) => {
-  let filePath = projectName
-    ? path.join(process.cwd(), projectName, "package.json")
-    : path.join(process.cwd(), "package.json");
-  const packageJson = JSON.parse(fs.readFileSync(filePath, "utf8"));
-  packageJson.scripts.lint = "eslint . --ext .js,.jsx,.ts,.tsx --fix";
-  fs.writeFileSync(filePath, JSON.stringify(packageJson, null, 2));
-};
 runInit();

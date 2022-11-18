@@ -3,7 +3,14 @@
     "browser": true,
     "es2021": true
   },
-  "ignorePatterns": ["**/node_modules/", "**/dist/", "**/build/", "*.test.js"],
+  "ignorePatterns": [
+    "**/node_modules/",
+    "**/dist/",
+    "**/build/",
+    "*.test.js",
+    "**/public",
+    "*.min.js"
+  ],
   "extends": ["plugin:react/recommended", "airbnb", "prettier"],
   "overrides": [],
   "parserOptions": {
@@ -13,13 +20,9 @@
   "plugins": ["react"],
   "rules": {
     "quotes": ["error", "double"],
-    "class-methods-use-this": "off",
     "max-len": ["warn", { "code": 100, "ignoreComments": true }],
-    "react/react-in-jsx-scope": "off",
     "react/jsx-filename-extension": [2, { "extensions": [".js", ".jsx"] }],
     "react/prop-types": [2, { "skipUndeclared": true }],
-    "react/jsx-props-no-spreading": "off",
-    "react/no-constructed-context-values": "off",
     "react/function-component-definition": [
       "error",
       {
@@ -28,10 +31,6 @@
       }
     ],
     "react/button-has-type": "off",
-    "comma-dangle": ["error", "never"],
-    // figure out a better way to deal with jsx-a11y issues for accesibility
-    "jsx-a11y/click-events-have-key-events": "off",
-    "jsx-a11y/media-has-caption": "off",
-    "jsx-a11y/no-static-element-interactions": "off"
+    "comma-dangle": ["error", "never"]
   }
 }

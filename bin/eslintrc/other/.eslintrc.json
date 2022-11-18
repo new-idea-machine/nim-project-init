@@ -4,8 +4,15 @@
     "es2021": true,
     "node": true
   },
-  "ignorePatterns": ["**/node_modules/", "**/dist/", "**/build/", "*.test.js"],
-  "extends": ["airbnb", "prettier"],
+  "ignorePatterns": [
+    "**/node_modules/",
+    "**/dist/",
+    "**/public",
+    "**/build/",
+    "*.test.js",
+    "*.min.js"
+  ],
+  "extends": ["airbnb-base", "prettier"],
   "overrides": [],
   "parserOptions": {
     "ecmaVersion": "latest",
@@ -14,6 +21,7 @@
   "rules": {
     "quotes": ["error", "double"],
     "max-len": ["warn", { "code": 100, "ignoreComments": true }],
-    "comma-dangle": ["error", "never"]
+    "comma-dangle": ["error", "never"],
+    "import/extensions": "off"
   }
 }
