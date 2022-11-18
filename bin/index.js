@@ -7,7 +7,9 @@ const {
   addLintScript,
   addPrettierScript,
   copyCss,
-  copyConfigFiles
+  copyConfigFiles,
+  copyGitIgnore,
+  cleanUpReactFiles
 } = require("./functions");
 const rl = readline.createInterface({
   input: process.stdin,
@@ -36,6 +38,7 @@ const createProject = async (isReact) => {
   if (isReact) {
     console.log("Running npx create-react-app...");
     execSync(`npx create-react-app ${projectName}`);
+    cleanUpReactFiles(projectName);
   } else {
     console.log("initializing npm package...");
     execSync(`mkdir ${projectName}`);
@@ -93,7 +96,11 @@ you can just run this tool inside the project folder.`
     await copyConfigFiles(projectName, isReact);
 
     console.log("Running npm run lint...");
-    execSync(`cd ${projectName} && npm run lint`);
+    try {
+      execSync(`cd ${projectName} && npm run lint`);
+    } catch (error) {
+      console.log("linting errors to fix: ", error.stdout.toString());
+    }
     copyGitIgnore(projectName);
   } else {
     execSync(`npm i -D ${installPackages.join(" ")}`);

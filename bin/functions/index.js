@@ -53,7 +53,7 @@ const setTypeModule = (projectName) => {
 };
 
 const copyGitIgnore = (projectName) => {
-  const gitIgnorePath = path.join(__dirname, "/.gitignore");
+  const gitIgnorePath = path.join(__dirname, "../.gitignore");
   const targetPath = path.join(process.cwd(), projectName, ".gitignore");
   copyFile(gitIgnorePath, targetPath);
 };
@@ -91,6 +91,29 @@ const copyCss = async (projectName, cssPath) => {
   copyFile(path.join(__dirname, "./base.css"), filePath);
 };
 
+const cleanUpReactFiles = (projectName) => {
+  console.log("Cleaning up react files");
+
+  // remove files that are not needed
+  let filePath = path.join(process.cwd(), projectName, "src");
+
+  fs.unlinkSync(path.join(filePath, "App.css"));
+  fs.unlinkSync(path.join(filePath, "App.test.js"));
+  fs.unlinkSync(path.join(filePath, "index.css"));
+  fs.unlinkSync(path.join(filePath, "logo.svg"));
+  fs.unlinkSync(path.join(filePath, "reportWebVitals.js"));
+  fs.unlinkSync(path.join(filePath, "setupTests.js"));
+
+  // overwrite App.js with const App = () => <div></div>;export default App;
+  const newAppContents = `import React from 'react';\nconst App = () => <div>${projectName}</div>; export default App;`;
+  fs.writeFileSync(path.join(filePath, "App.js"), newAppContents);
+
+  // overwrite index.js
+  const newIndexContents =
+    'import React from "react";import ReactDOM from "react-dom/client";import App from "./App";\nconst root = ReactDOM.createRoot(document.getElementById("root"));root.render(<React.StrictMode><App /></React.StrictMode>);';
+  fs.writeFileSync(path.join(filePath, "index.js"), newIndexContents);
+};
+
 module.exports = {
   generateReadMe,
   copyFile,
@@ -99,5 +122,6 @@ module.exports = {
   setTypeModule,
   copyGitIgnore,
   copyConfigFiles,
-  copyCss
+  copyCss,
+  cleanUpReactFiles
 };

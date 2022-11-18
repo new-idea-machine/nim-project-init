@@ -31,6 +31,7 @@
       }
     ],
     "react/button-has-type": "off",
-    "comma-dangle": ["error", "never"]
+    "comma-dangle": ["error", "never"],
+    "react/react-in-jsx-scope": "off"
   }
 }
