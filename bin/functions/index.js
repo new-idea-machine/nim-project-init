@@ -1,3 +1,4 @@
+const { execSync } = require("child_process");
 const fs = require("fs");
 const path = require("path");
 
@@ -88,7 +89,7 @@ const copyCss = async (projectName, cssPath) => {
   if (!fs.existsSync(filePath)) {
     fs.mkdirSync(filePath);
   }
-  copyFile(path.join(__dirname, "./base.css"), filePath);
+  copyFile(path.join(__dirname, "../base.css"), filePath);
 };
 
 const cleanUpReactFiles = (projectName) => {
@@ -105,12 +106,12 @@ const cleanUpReactFiles = (projectName) => {
   fs.unlinkSync(path.join(filePath, "setupTests.js"));
 
   // overwrite App.js with const App = () => <div></div>;export default App;
-  const newAppContents = `import React from 'react';\nconst App = () => <div>${projectName}</div>; export default App;`;
+  const newAppContents = `import React from 'react';\nconst App=()=><div>${projectName}</div>;\n\nexport default App;`;
   fs.writeFileSync(path.join(filePath, "App.js"), newAppContents);
 
   // overwrite index.js
   const newIndexContents =
-    'import React from "react";import ReactDOM from "react-dom/client";import App from "./App";\nconst root = ReactDOM.createRoot(document.getElementById("root"));root.render(<React.StrictMode><App /></React.StrictMode>);';
+    'import React from "react";import ReactDOM from "react-dom/client";import App from "./App";\nconst root=ReactDOM.createRoot(document.getElementById("root"));root.render(<React.StrictMode><App/></React.StrictMode>);';
   fs.writeFileSync(path.join(filePath, "index.js"), newIndexContents);
 };
 

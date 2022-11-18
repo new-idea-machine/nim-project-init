@@ -18,7 +18,8 @@ const rl = readline.createInterface({
 const mainPackages = [
   "eslint",
   "eslint-config-prettier",
-  "eslint-plugin-import"
+  "eslint-plugin-import",
+  "prettier"
 ];
 
 const nonReactNpmPackages = ["eslint-config-airbnb-base"];
@@ -39,6 +40,16 @@ const createProject = async (isReact) => {
     console.log("Running npx create-react-app...");
     execSync(`npx create-react-app ${projectName}`);
     cleanUpReactFiles(projectName);
+    // ask if wants React Router
+    const reactRouter = await new Promise((resolve) => {
+      rl.question("Add React Router? (y/N): ", (answer) => {
+        resolve(answer === "y" || answer === "Y");
+      });
+    });
+    if (reactRouter) {
+      console.log("Adding React Router");
+      execSync(`cd ${projectName} && npm i react-router-dom`);
+    }
   } else {
     console.log("initializing npm package...");
     execSync(`mkdir ${projectName}`);
@@ -86,23 +97,22 @@ you can just run this tool inside the project folder.`
     });
   });
 
-  console.log("installing dev dependencies");
   // copy .eslintrc.js and prettier to project root
   if (!isExistingProject) {
     projectName = await createProject(isReact);
+    console.log("installing dev dependencies");
     execSync(`cd ${projectName} && npm i -D ${installPackages.join(" ")}`);
     console.log("Generating README.md");
     generateReadMe(projectName);
     await copyConfigFiles(projectName, isReact);
 
     console.log("Running npm run lint...");
-    try {
-      execSync(`cd ${projectName} && npm run lint`);
-    } catch (error) {
-      console.log("linting errors to fix: ", error.stdout.toString());
-    }
+    execSync(`cd ${projectName} && npm run lint`);
+    execSync(`cd ${projectName} && npm run pretty`);
     copyGitIgnore(projectName);
   } else {
+    console.log("installing dev dependencies");
+
     execSync(`npm i -D ${installPackages.join(" ")}`);
     await copyConfigFiles(projectName, isReact);
 
