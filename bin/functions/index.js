@@ -63,16 +63,16 @@ const copyConfigFiles = async (projectName, isReact) => {
     ? path.join(process.cwd(), projectName)
     : process.cwd();
   let sourcePath = isReact
-    ? path.join(__dirname, "eslintrc", "react")
-    : path.join(__dirname, "eslintrc", "other");
+    ? path.join(__dirname, "../eslintrc", "react")
+    : path.join(__dirname, "../eslintrc", "other");
   console.log("source path", sourcePath);
   console.log("destination path", destinationPath);
   copyFile(
-    path.join(sourcePath, "./.eslintrc.json"),
+    path.join(sourcePath, ".eslintrc.json"),
     path.join(destinationPath, ".eslintrc.json")
   );
   copyFile(
-    path.join(__dirname, ".prettierrc"),
+    path.join(__dirname, "../.prettierrc"),
     path.join(destinationPath, ".prettierrc")
   );
 };
