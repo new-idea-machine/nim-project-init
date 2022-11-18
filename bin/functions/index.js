@@ -54,7 +54,7 @@ const setTypeModule = (projectName) => {
 };
 
 const copyGitIgnore = (projectName) => {
-  const gitIgnorePath = path.join(__dirname, "../.gitignore");
+  const gitIgnorePath = path.join(__dirname, "../files/.gitignore");
   const targetPath = path.join(process.cwd(), projectName, ".gitignore");
   copyFile(gitIgnorePath, targetPath);
 };
@@ -73,7 +73,7 @@ const copyConfigFiles = async (projectName, isReact) => {
     path.join(destinationPath, ".eslintrc.json")
   );
   copyFile(
-    path.join(__dirname, "../.prettierrc"),
+    path.join(__dirname, "../files/.prettierrc"),
     path.join(destinationPath, ".prettierrc")
   );
 };
@@ -89,7 +89,7 @@ const copyCss = async (projectName, cssPath) => {
   if (!fs.existsSync(filePath)) {
     fs.mkdirSync(filePath);
   }
-  copyFile(path.join(__dirname, "../base.css"), filePath);
+  copyFile(path.join(__dirname, "../files/base.css"), filePath);
 };
 
 const cleanUpReactFiles = (projectName) => {
@@ -124,5 +124,5 @@ module.exports = {
   copyGitIgnore,
   copyConfigFiles,
   copyCss,
-  cleanUpReactFiles
+  cleanUpReactFiles,
 };
