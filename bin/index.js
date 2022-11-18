@@ -6,7 +6,8 @@ const {
   setTypeModule,
   addLintScript,
   addPrettierScript,
-  copyCss
+  copyCss,
+  copyConfigFiles
 } = require("./functions");
 const rl = readline.createInterface({
   input: process.stdin,
