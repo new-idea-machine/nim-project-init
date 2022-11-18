@@ -54,7 +54,7 @@ const setTypeModule = (projectName) => {
 };
 
 const copyGitIgnore = (projectName) => {
-  const gitIgnorePath = path.join(__dirname, "../files/.gitignore");
+  const gitIgnorePath = path.join(__dirname, "../files/gitignore");
   const targetPath = path.join(process.cwd(), projectName, ".gitignore");
   copyFile(gitIgnorePath, targetPath);
 };
